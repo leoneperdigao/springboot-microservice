@@ -1,4 +1,4 @@
-# Example of Spring Boot Restful Web Services with Swagger and Docker Image creation
+# Microservice template with Spring Boot based on Restful pattern with Swagger and Docker Image creation
 
 Spring Boot is the framework to create standalone production ready restful web services. This opens the way for designing SAAS solution as microservices. Traditionally Spring MVC application which used to provide restful apis would be generated as a war. In case of Spring Boot it is created as a jar. This jar file also includes the application server (tomcat/jetty). The reason we call Spring Boot Production ready is because it provides numerous features out of the box. Few examples of these are autoconfig, which can be looked at as convention for production configuration. Additional End Points to monitor and gauge the health of the system. Other end points also provies you metrics, thread trace etc. These can be turned on or off.
 
