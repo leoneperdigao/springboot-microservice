@@ -1,0 +1,100 @@
+buildscript {
+	project.ext {
+        bootVersion = '2.0.6.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${project.bootVersion}"
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
+    }
+}
+//apply plugin: "sonar-runner"
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'docker'
+
+version =  '0.1.0'
+
+bootJar {
+    baseName = 'spring-boot-sample'
+    version =  '0.1.0'
+}
+
+compileJava {
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+    options.compilerArgs += '-proc:none'
+}
+
+repositories { 
+	mavenCentral() 
+	jcenter()
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testRuntime
+    }
+}
+
+/*
+sonarRunner {
+    sonarProperties {
+        property "sonar.host.url", "http://162.243.152.234:9000"
+        property "sonar.jdbc.url", "jdbc:mysql://162.243.152.234:3306/sonar"
+        property "sonar.jdbc.driverClassName", "com.mysql.jdbc.Driver"
+        property "sonar.jdbc.username", "sonar"
+        property "sonar.jdbc.password", "123qwe"
+    }
+}*/
+
+
+task cucumber() {
+    dependsOn assemble, compileTestJava
+    doLast {
+        javaexec {
+            main = "cucumber.api.junit.Cucumber"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [ '--plugin','junit:build/cucumber-junit-report/junit.xml', '--plugin','html:build/cucumber-html-report','--glue', 'com/example/springboot', 'src/test/resources']
+        }
+    }
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web:${project.bootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:${project.bootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${project.bootVersion}")
+
+	compile("com.h2database:h2")
+	
+    compile("io.springfox:springfox-swagger2:2.9.2")
+    compile("io.springfox:springfox-swagger-ui:2.9.2")
+    compile("org.ajar:swagger-spring-mvc-ui:0.4") 
+    compile("org.apache.logging.log4j:log4j-api:2.11.1")
+    annotationProcessor("org.apache.logging.log4j:log4j-core:2.11.1")
+
+    testCompile("junit:junit:4.+")
+    testCompile("org.springframework.boot:spring-boot-starter-test:${project.bootVersion}")
+    testCompile("com.github.tomakehurst:wiremock:2.19.0")
+    testCompile("io.cucumber:cucumber-java8:4.0.0")
+    testCompile("io.cucumber:cucumber-junit:4.0.0")
+}
+
+group = 'example'
+mainClassName = 'com.example.springboot.Application'
+
+distDocker {
+    exposePort 8080
+}
+
+task createWrapper(type: Wrapper) {
+    gradleVersion = '4.10.2'
+}
+
