@@ -22,7 +22,7 @@ The jar executable artifact is create as a result of the above command
 ## How to run this Project?
 * $>java -jar  build/libs/spring-boot-sample-0.1.0.jar
 
-Open http://localhost:8080/sdoc.jsp in your browser. You will be shown Swagger Restful Documentation there. Refer the screenshot below
+Open http://localhost:8080/swagger-ui.html in your browser. You will be shown Swagger Restful Documentation there. Refer the screenshot below
 
 ## Documenting the Web Services
 Swagger is a tool to 
@@ -40,17 +40,16 @@ Luckily we have a Gradle Plugin that can directly create the Docker Image of the
 
 $>./gradlew distDocker
 
-We can now check if this image (synerzip/springboot-template) is created as part of this build. Note the name comes from build.gradle file
+We can now check if this image (leoneperdigao/springboot-microservice) is created as part of this build. Note the name comes from build.gradle file
 
 The next step is to take this image and run it. Note you can push this image to docker hub private repository which the devops team can then take to put it on a production server.
 
-$>docker run -d -p 8080:8080 synerzip/springboot-template
+$>docker run -p 8080:8080 leoneperdigao/springboot-microservice
 
-* -d option is to run the container in deamon mode
 * -p is to map port 8080 from the container to the host machine (in this case boot2docker machine on mac)
-* synerzip/springboot-template is the image we want to run
+* leoneperdigao/springboot-microservice is the image we want to run
 
-Now you can point your browser to http:&lt;&lt;host-machine-ip&gt;&gt;:8080/sdoc.jsp. You can see the same application we earlier ran from our host machine, now running in the container container from a Docker Image
+Now you can point your browser to http:&lt;&lt;host-machine-ip&gt;&gt;:8080/swagger-ui.html. You can see the same application we earlier ran from our host machine, now running in the container container from a Docker Image
 
 ## Future Integration with Kubernets
 TODO

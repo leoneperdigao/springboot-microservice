@@ -91,6 +91,7 @@ group = 'example'
 mainClassName = 'com.example.springboot.Application'
 
 distDocker {
+	tag = 'leoneperdigao/springboot-microservice'
     exposePort 8080
 }
 
