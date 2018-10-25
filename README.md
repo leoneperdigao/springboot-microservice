@@ -20,7 +20,7 @@ Spring Boot is the framework to create standalone production ready restful web s
 The jar executable artifact is create as a result of the above command
 
 ## How to run this Project?
-* $>java -jar  build/libs/spring-boot-sample-0.1.0.jar
+* $>java -jar  build/libs/springboot-microservice-0.1.0.jar
 
 Open http://localhost:8080/swagger-ui.html in your browser. You will be shown Swagger Restful Documentation there. Refer the screenshot below
 
