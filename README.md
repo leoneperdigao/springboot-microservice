@@ -51,7 +51,7 @@ $>docker run -p 8080:8080 leoneperdigao/springboot-microservice:0.1.0
 
 Now you can point your browser to http:&lt;&lt;host-machine-ip&gt;&gt;:8080/swagger-ui.html. You can see the same application we earlier ran from our host machine, now running in the container container from a Docker Image
 
-## Future Integration with Sonar Kubernetes
+## Future Integration with Sonar
 TODO
 
 ## Clustering with Kubernetes
