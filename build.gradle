@@ -1,6 +1,7 @@
 buildscript {
 	project.ext {
         bootVersion = '2.0.6.RELEASE'
+        gradleDockerVersion = '1.2'
     }
     repositories {
         mavenCentral()
@@ -9,7 +10,7 @@ buildscript {
     
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${project.bootVersion}"
-        classpath 'se.transmode.gradle:gradle-docker:1.2'
+        classpath("se.transmode.gradle:gradle-docker:${gradleDockerVersion}")
     }
 }
 //apply plugin: "sonar-runner"
@@ -20,29 +21,29 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'docker'
 
+group = 'example'
 version =  '0.1.0'
+mainClassName = 'com.example.springboot.Application'
 
 bootJar {
-    baseName = 'spring-boot-sample'
+    baseName = 'springboot-microservice'
     version =  '0.1.0'
+}
+
+jar {
+    group    = group
+    version  = version
+    manifest { attributes "Main-Class": mainClassName }
 }
 
 compileJava {
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
+	mainClassName = mainClassName
     options.compilerArgs += '-proc:none'
 }
 
-repositories { 
-	mavenCentral() 
-	jcenter()
-}
 
-configurations {
-    cucumberRuntime {
-        extendsFrom testRuntime
-    }
-}
 
 /*
 sonarRunner {
@@ -55,6 +56,24 @@ sonarRunner {
     }
 }*/
 
+task buildDocker(type: Docker, dependsOn: build) {
+	push = false
+	applicationName = bootJar.baseName
+	baseImage "frolvlad/alpine-oraclejdk8:slim"
+    maintainer 'Leone Perdigao "leone.lage@gmail.com"'
+	tag = "leoneperdigao/${bootJar.baseName}"
+    setEnvironment('JAVA_OPTS', '-Xms128m -Xmx768m')
+	addFile("${bootJar.baseName}-${version}.jar", "app.jar")
+    volume("/tmp")
+    entryPoint(["java", "-jar", "app.jar"])
+    exposePort 8080
+    doFirst {
+	    copy {
+	      from jar
+	      into stageDir
+	    }
+	}
+}
 
 task cucumber() {
     dependsOn assemble, compileTestJava
@@ -65,6 +84,27 @@ task cucumber() {
             args = [ '--plugin','junit:build/cucumber-junit-report/junit.xml', '--plugin','html:build/cucumber-html-report','--glue', 'com/example/springboot', 'src/test/resources']
         }
     }
+}
+
+task unpack(type: Copy) {
+    dependsOn bootJar
+    from(zipTree(tasks.bootJar.outputs.files.singleFile))
+    into("build/dependency")
+}
+
+task createWrapper(type: Wrapper) {
+    gradleVersion = '4.10.2'
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testRuntime
+    }
+}
+
+repositories { 
+	mavenCentral() 
+	jcenter()
 }
 
 dependencies {
@@ -85,17 +125,5 @@ dependencies {
     testCompile("com.github.tomakehurst:wiremock:2.19.0")
     testCompile("io.cucumber:cucumber-java8:4.0.0")
     testCompile("io.cucumber:cucumber-junit:4.0.0")
-}
-
-group = 'example'
-mainClassName = 'com.example.springboot.Application'
-
-distDocker {
-	tag = 'leoneperdigao/springboot-microservice'
-    exposePort 8080
-}
-
-task createWrapper(type: Wrapper) {
-    gradleVersion = '4.10.2'
 }
 

@@ -42,7 +42,7 @@ public class SwaggerConfig {
                 "A Microservice template with Spring boot",
                 "0.1.0",
                 "https://www.apache.org/licenses/LICENSE-2.0",
-                new Contact("Leone Perdigão","https://github.com/leoneperdigao",""),
+                new Contact("Leone Perdigao","https://github.com/leoneperdigao",""),
                 "Apache License 2.0",
                 "https://www.apache.org/licenses/LICENSE-2.0",
                 Collections.emptyList()
