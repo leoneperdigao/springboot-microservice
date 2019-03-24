@@ -15,13 +15,15 @@ Spring Boot is the framework to create standalone production ready restful web s
 * Ensure that you already installed docker to run the image to be created
 
 ## How to build this Project?
-* $>./gradlew build
-
+```
+$>./gradlew build
+```
 The jar executable artifact is create as a result of the above command
 
 ## How to run this Project?
-* $>java -jar  build/libs/springboot-microservice-0.1.0.jar
-
+``` 
+$>java -jar  build/libs/springboot-microservice-0.1.0.jar
+```
 Open http://localhost:8080/swagger-ui.html in your browser. You will be shown Swagger Restful Documentation there. Refer the screenshot below
 
 ## Documenting the Web Services
@@ -38,13 +40,17 @@ With the advent of Docker the focus changes from creating application binary as 
 
 Luckily we have a Gradle Plugin that can directly create the Docker Image of the Business Application (in our case our restful web service).
 
+```
 $>./gradlew buildDocker
+```
 
 We can now check if this image (leoneperdigao/springboot-microservice) is created as part of this build. Note the name comes from build.gradle file
 
 The next step is to take this image and run it. Note you can push this image to docker hub private repository which the devops team can then take to put it on a production server.
 
+```
 $>docker run -p 8080:8080 leoneperdigao/springboot-microservice:0.1.0
+```
 
 * -p is to map port 8080 from the container to the host machine (in this case boot2docker machine on mac)
 * leoneperdigao/springboot-microservice is the image we want to run
