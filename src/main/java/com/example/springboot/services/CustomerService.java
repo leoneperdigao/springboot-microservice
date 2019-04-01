@@ -6,7 +6,7 @@ package com.example.springboot.services;
 import com.example.springboot.domain.Customer;
 
 /**
- * @author rohitghatol
+ * @author leone.perdigao
  *
  */
 public interface CustomerService {
